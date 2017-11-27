@@ -54,7 +54,7 @@ class AppClient
     public function setDomain(string $domain)
     {
         if (filter_var(gethostbyname($domain), FILTER_VALIDATE_IP)) {
-            $this->setDomain($this->getProtocol().$domain);
+            $this->domain = $this->getProtocol().$domain;
         } else {
             throw new \Exception("Invalid Domain", 500);
         }

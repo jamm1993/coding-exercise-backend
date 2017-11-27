@@ -8,7 +8,7 @@
 
 namespace App\Data;
 
-use Psr\Log\LoggerInterface;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class Recipe
 {
@@ -28,10 +28,6 @@ class Recipe
      *  @var string $thumbnail 
      */
     private $thumbnail;
-    /*
-     *  @var LoggerInterface $logger 
-     */
-    private static $logger;
 
     public function __construct(array $recipe)
     {
@@ -41,7 +37,7 @@ class Recipe
             $this->setThumbnail($recipe["thumbnail"]);
             $this->setTitle($recipe["title"]);
         } catch (\Exception $e) {
-            $this->getLogger()->warning("Error: not enough parameters", ["item" => $recipe]);
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
     }
 
@@ -107,21 +103,5 @@ class Recipe
     public function setThumbnail(string $thumbnail)
     {
         $this->thumbnail = $thumbnail;
-    }
-
-    /**
-     * @return LoggerInterface
-     */
-    public function getLogger()
-    {
-        return self::$logger;
-    }
-
-    /**
-     * @param LoggerInterface $logger
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        self::$logger = $logger;
     }
 }

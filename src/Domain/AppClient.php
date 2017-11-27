@@ -8,6 +8,9 @@
 
 namespace App\Domain;
 
+use \GuzzleHttp\Client;
+use Symfony\Component\Config\Definition\Exception\Exception;
+
 class AppClient
 {
     /*
@@ -53,8 +56,7 @@ class AppClient
         if (filter_var(gethostbyname($domain), FILTER_VALIDATE_IP)) {
             $this->setDomain($this->getProtocol().$domain);
         } else {
-            $this->getLogger()->error("Invalid Domain", ["domain" => $domain]);
-            throw new \Exception($message, 500);
+            throw new \Exception("Invalid Domain", 500);
         }
     }
 
@@ -160,8 +162,6 @@ class AppClient
                 "/api/?q=$tags&i=$search&p=$page"
             );
         } catch(\Exception $e) {
-            $message = sprintf($this->getDomain()." unable to connect to server");
-            $this->getLogger()->error($message, ["domain" => $this->getDomain(), "error" => $e->getMessage()]);
             throw new \Exception($e->getMessage(), $e->getCode());
         }
         return $response->getBody()->getContents();
